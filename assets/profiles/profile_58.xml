@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<profil>
+  <id>58</id>
+  
+  <properties>
+    <entry name="firstname" type="string" required="true" />
+    <entry name="lastname" type="string" required="true" />
+    <entry name="statut" type="string" required="true" />
+    <entry name="average" type="number" required="false" />
+    <entry name="address" type="string" required="false" />
+    <entry name="zip" type="string" required="true" />
+    <entry name="city" type="string" required="true" />
+    <entry name="active" type="boolean" required="true" />
+  </properties>
+</profil>

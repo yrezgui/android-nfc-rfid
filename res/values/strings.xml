@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">rfid</string>
+    <string name="title_profile_detail">Profile Detail</string>
+    <string name="title_lecture">Projet RFID  - Lecture</string>
+    <string name="title_ecriture">Projet RFID - Ecriture</string>
+    <string name="title_homescreen">Projet RFID - Accueil</string>
+    <string name="title_nfcscreen">NFC Example</string>
+    <string name="error">Erreur pauvre fou</string>
+    <string name="wireless_settings">Réglages WIFI</string>
+    <string name="dialog_text">Message</string>
+    <string name="dialog_title">Message</string>
+    <string name="nfc_disabled">NFC désactivé</string>
+    <string name="turn_on_nfc">Activer NFC</string>
+    <string name="nfc_card_waiting">En attente d\'une carte compatible NFC</string>
+    <string name="title_profileChooser">Selection du profile</string>
+
+</resources>
