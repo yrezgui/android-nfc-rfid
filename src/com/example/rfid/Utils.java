@@ -32,7 +32,7 @@ import java.util.List;
 
 public class Utils {
 
-    // Vérifie si le NFC est activé
+    // Vérify if the NFC is activated
     public static void checkNfcEnabled(final Activity activity, NfcAdapter adapter) {
         if (adapter.isEnabled()) {
             return;
@@ -54,7 +54,7 @@ public class Utils {
             .show();
     }
     
-    // Conversion d'un int en tableau de d'octet
+    // Conversion from an int to an array of bytes
     public static final byte[] intToByteArray(int value) {
         byte[] tmp = new byte[] {
                 (byte)(value >>> 16),
@@ -69,17 +69,17 @@ public class Utils {
         };
     }
     
-    // Décode les données selon l'encodage ISO-8859-1
+    // Decoding the data in the charset ISO-8859-1
     public static String decodeISO(byte[] bytes) {
 	    return new String(bytes, Charset.forName("ISO-8859-1"));
 	}
     
-    // Encode les caractéres selon l'encodage ISO-8859-1
+    // Encoding the data in the charset ISO-8859-1
     public static byte[] encodeISO(String string) {
 	    return string.getBytes(Charset.forName("ISO-8859-1"));
 	}
     
-    // Encode les caractéres selon l'encodage ISO-8859-1 et les renvoi sous la forme de l'objet Byte
+    // Encoding the data in the charset ISO-8859-1 and return an array of Bytes
     public static Byte[] encodeISO(String string, int length) {
 	    byte[] temp = string.getBytes(Charset.forName("ISO-8859-1"));
 	    byte[] result = new byte[length];
@@ -102,7 +102,7 @@ public class Utils {
 	    return resultConvert;
 	}
     
-    // Encode les caractéres selon l'encodage ISO-8859-1 et les renvoi sous la forme du type primaire byte
+    // Encoding the data in the charset ISO-8859-1 and return an array of bytes
     public static byte[] encodeISOByte(String string, int length) {
 	    byte[] temp = string.getBytes(Charset.forName("ISO-8859-1"));
 	    byte[] result = new byte[length];
@@ -126,24 +126,8 @@ public class Utils {
     	Log.i("Resultat", result + "");
 	    return result;
 	}
-    
-    // Décode les données selon l'encodage UTF-8
-    public static String decodeUTF8(byte[] bytes) {
-	    return new String(bytes, Charset.forName("UTF-8"));
-	}
-    
-    // Encode les caractéres selon l'encodage UTF-8
-    public static Byte[] encodeUTF8(String string) {
-    	byte[] result = string.getBytes(Charset.forName("UTF-8"));
-    	Byte[] resultConvert = new Byte[result.length];
-    	
-    	for(int i = 0; i < result.length; i++){
-    		resultConvert[i] = (Byte)result[i];
-    	}
-	    return resultConvert;
-	}
 	
-    // Encapsulation du message pour standardisation
+    // Encapsulation of the message for the NFC communication
     public static byte[] wrapMessage (byte command, byte[] parameters) throws Exception {
 	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -160,35 +144,7 @@ public class Utils {
 	    return stream.toByteArray();
 	}
 
-    // Affichage erreur
-    public static void showError (final Activity activity, Exception ex) {
-        Log.e(activity.getClass().getName(), ex.getMessage(), ex);
-        new AlertDialog.Builder(activity)
-            .setMessage(Utils.getErrorMessage(ex))
-            .show();
-    }
-
-    // Cas de crash
-    public static void showErrorAndFinish (final Activity activity, Exception ex) {
-        try {
-            Log.e(activity.getClass().getName(), Utils.getErrorMessage(ex));
-            ex.printStackTrace();
-
-            new AlertDialog.Builder(activity)
-                .setMessage(Utils.getErrorMessage(ex))
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        activity.finish();
-                    }
-                })
-                .show();
-        } catch (WindowManager.BadTokenException unused) {
-            /* Ignore... happens if the activity was destroyed */
-        }
-    }
-
-    // Conversion hexa des données en chaine
+    // Conversion bytes data to string
     public static String getHexString (byte[] b) throws Exception {
         String result = "";
         for (int i=0; i < b.length; i++) {
@@ -197,7 +153,7 @@ public class Utils {
         return result;
     }
 
-    // Conversion hexa des données en chaine
+    // Conversion bytes data to string with a default result
     public static String getHexString (byte[] b, String defaultResult) {
         try {
             return getHexString(b);
@@ -206,7 +162,7 @@ public class Utils {
         }
     }
 
-    // Conversion chaine vers hexa
+    // Conversion string data to bytes[]
     public static byte[] hexStringToByteArray (String s) {
         if ((s.length() % 2) != 0) {
             throw new IllegalArgumentException("Bad input string: " + s);
@@ -221,131 +177,17 @@ public class Utils {
         return data;
     }
     
-    // Conversion tableau de données vers int
+    // Conversion byte[] to int
     public static int byteArrayToInt(byte[] b) {
         return byteArrayToInt(b, 0);
     }
-    
-    // Conversion tableau de données vers int
-    public static int byteArrayToInt(byte[] b, int offset) {
-        return byteArrayToInt(b, offset, b.length);
-    }
-    
-    // Conversion tableau de données vers int
-    public static int byteArrayToInt(byte[] b, int offset, int length) {
-        return (int) byteArrayToLong(b, offset, length);
-    }
 
-    // Conversion tableau de données vers long
-    public static long byteArrayToLong(byte[] b, int offset, int length) {
-        if (b.length < length)
-            throw new IllegalArgumentException("length must be less than or equal to b.length");
-
-        long value = 0;
-        for (int i = 0; i < length; i++) {
-            int shift = (length - 1 - i) * 8;
-            value += (b[i + offset] & 0x000000FF) << shift;
-        }
-        return value;
-    }
-
-    // Découpe du tableau de données selon une certaine longueur
-    public static byte[] byteArraySlice(byte[] b, int offset, int length) {
-        byte[] ret = new byte[length];
-        for (int i = 0; i < length; i++)
-            ret[i] = b[offset+i];
-        return ret;
-    }
-
-    // Conversion des nodes xml vers chaine de caractére
-    public static String xmlNodeToString (Node node) throws Exception {
-        // The amount of code required to do simple things in Java is incredible.
-        Source source = new DOMSource(node);
-        StringWriter stringWriter = new StringWriter();
-        Result result = new StreamResult(stringWriter);
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-        transformer.setURIResolver(null);
-        transformer.transform(source, result);
-        return stringWriter.getBuffer().toString();
-    }
-
-    // Récupére message d'erreur
-    public static String getErrorMessage (Throwable ex) {
-        String errorMessage = ex.getLocalizedMessage();
-        if (errorMessage == null)
-            errorMessage = ex.getMessage();
-        if (errorMessage == null)
-            errorMessage = ex.toString();
-
-        if (ex.getCause() != null) {
-            String causeMessage = ex.getCause().getLocalizedMessage();
-            if (causeMessage == null)
-                causeMessage = ex.getCause().getMessage();
-            if (causeMessage == null)
-                causeMessage = ex.getCause().toString();
-
-            if (causeMessage != null)
-                errorMessage += ": " + causeMessage;
-        }
-
-        return errorMessage;
-    }
-
-    // récupére des informations sur le systéme tel que le modéle et le numéro de série
+    // Get information about the card (NFC)
     public static String getDeviceInfoString() {
         return String.format("nModel: %s (%s %s)\nOS: %s\n\n",
             Build.MODEL,
             Build.MANUFACTURER,
             Build.BRAND,
             Build.VERSION.RELEASE);
-    }
-
-    // Recherche dans une liste
-    public static <T> T findInList(List<T> list, Matcher matcher) {
-        for (T item : list) {
-            if (matcher.matches(item)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public static interface Matcher<T> {
-        public boolean matches(T t);
-    }
-
-    // Conversion de données vers int
-    public static int convertBCDtoInteger(byte data) {
-        return (((data & (char)0xF0) >> 4) * 10) + ((data & (char)0x0F));
-    }
-
-    public static int getBitsFromInteger(int buffer, int iStartBit, int iLength) {
-        return (buffer >> (iStartBit)) & ((char)0xFF >> (8 - iLength));
-    }
-
-    /* Based on function from mfocGUI by 'Huuf' (http://www.huuf.info/OV/) */
-    public static int getBitsFromBuffer(byte[] buffer, int iStartBit, int iLength) {
-        int iEndBit = iStartBit + iLength - 1;
-        int iSByte = iStartBit / 8;
-        int iSBit = iStartBit % 8;
-        int iEByte = iEndBit / 8;
-        int iEBit = iEndBit % 8;
-
-        if (iSByte == iEByte) {
-            return (int)(((char)buffer[iEByte] >> (7 - iEBit)) & ((char)0xFF >> (8 - iLength)));
-        } else {
-            int uRet = (((char)buffer[iSByte] & (char)((char)0xFF >> iSBit)) << (((iEByte - iSByte - 1) * 8) + (iEBit + 1)));
-
-            for (int i = iSByte + 1; i < iEByte; i++) {
-                uRet |= (((char)buffer[i] & (char)0xFF) << (((iEByte - i - 1) * 8) + (iEBit + 1)));
-            }
-
-            uRet |= (((char)buffer[iEByte] & (char)0xFF)) >> (7 - iEBit);
-
-            return uRet;
-        }
     }
 }

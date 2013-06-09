@@ -15,13 +15,13 @@ public class XMLParser extends DefaultHandler {
 	
 	@Override
 	public void startDocument() throws SAXException {
-		//créer et ouvrir la BDD
+		//Open the document
 		Log.w("DEBUT DOCUMENT","Handler");
 		
 	}
 	@Override
 	public void endDocument() throws SAXException {
-		// Fermer la BDD
+		// End of the document
 		Log.w("END DOCUMENT","Handler");
 	}
 	
